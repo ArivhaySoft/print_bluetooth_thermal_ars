@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
+import 'package:logger/logger.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:print_bluetooth_thermal/post_code.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:image/image.dart' as img;
@@ -32,9 +34,26 @@ class _MyAppState extends State<MyApp> {
   String optionprinttype = "58 mm";
   List<String> options = ["58 mm", "80 mm"];
 
+  _permisionBlue () async {
+    PermissionStatus bluetoothStatus = await Permission.bluetoothScan.request();
+    PermissionStatus locationStatus = await Permission.location.request();
+    PermissionStatus bluetoothConnect = await Permission.bluetoothConnect.request();
+    if (bluetoothConnect.isGranted ) {
+      Logger().i('Grand bluetoothConnect');
+    }
+    if (bluetoothStatus.isGranted ) {
+      Logger().i('Grand bluetoothStatus');
+    }
+    if (locationStatus.isGranted) {
+      Logger().i('Grand locationStatus');
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
+    _permisionBlue ();
     initPlatformState();
   }
 
